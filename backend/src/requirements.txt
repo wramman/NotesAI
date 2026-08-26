@@ -1,0 +1,6 @@
+sqlmodel
+psycopg2-binary
+fastapi[standard]
+pydantic-settings
+python-dotenv
+ollama
