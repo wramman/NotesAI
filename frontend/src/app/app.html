@@ -1,0 +1,19 @@
+<div
+  class="flex min-h-screen bg-background text-on-background selection:bg-primary selection:text-on-primary dark:bg-canvas-dark"
+>
+  <app-sidebar />
+
+  @if (ui.menuOpen()) {
+    <button
+      type="button"
+      class="fixed inset-0 z-40 bg-on-background/25 backdrop-blur-[2px] md:hidden"
+      aria-label="Cerrar menú"
+      (click)="ui.closeMenu()"
+    ></button>
+  }
+
+  <div class="flex min-h-screen flex-1 flex-col md:ml-[280px]">
+    <app-top-bar />
+    <router-outlet />
+  </div>
+</div>

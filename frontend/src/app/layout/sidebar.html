@@ -1,0 +1,100 @@
+<nav
+  class="fixed top-0 left-0 z-50 flex h-screen w-[280px] flex-col border-r border-surface-variant/50 bg-surface-container px-4 py-6 transition-transform duration-200 dark:border-white/5 dark:bg-sidebar-dark md:translate-x-0"
+  [class.-translate-x-full]="!ui.menuOpen()"
+  aria-label="Navegación principal"
+>
+  <button
+    type="button"
+    class="mb-10 flex w-full items-center justify-center gap-2 rounded-lg bg-primary py-3.5 text-lg font-semibold text-on-primary transition-colors duration-200 hover:bg-primary/90 dark:shadow-none"
+    (click)="ui.createNote()"
+  >
+    <span class="material-symbols-outlined" style="font-size: 22px">add</span>
+    Nueva Nota
+  </button>
+
+  <div class="custom-scrollbar flex-1 overflow-y-auto">
+    <p class="font-label-md text-label-md mb-2 px-2 tracking-wider text-outline uppercase">
+      Notas
+    </p>
+    <!-- <p class="font-label-md text-label-md mb-2 px-2 tracking-wider text-outline uppercase">
+      Views
+    </p> -->
+    <!-- <ul class="mb-6 space-y-1">
+      @for (view of ui.views; track view.id) {
+        <li>
+          <button
+            type="button"
+            class="font-body-md text-body-md flex w-full cursor-pointer items-center gap-3 py-2 text-left transition-all duration-200 hover:bg-surface-variant/50 active:scale-95 dark:hover:bg-white/5"
+            [ngClass]="
+              ui.activeView() === view.id
+                ? 'border-l-4 border-primary pl-4 font-bold text-primary dark:border-inverse-primary dark:text-inverse-primary'
+                : 'pl-5 text-on-secondary-fixed-variant dark:text-on-surface-variant'
+            "
+            (click)="ui.setView(view.id)"
+          >
+            <span class="material-symbols-outlined">{{ view.icon }}</span>
+            {{ view.label }}
+          </button>
+        </li>
+      }
+    </ul> -->
+    @if (ui.loading()) {
+      <p class="font-body-sm text-body-sm px-2 text-outline">Loading…</p>
+    }
+    <ul class="space-y-1">
+      @for (note of ui.visibleNotes(); track note.id) {
+        <li>
+          <button
+            type="button"
+            class="group flex w-full cursor-pointer items-center gap-3 rounded-md px-2 py-2 text-left text-on-surface-variant transition-colors duration-200 hover:bg-surface-variant/50 dark:hover:bg-white/5"
+            [class.bg-surface-variant/50]="ui.selected()?.id === note.id"
+            (click)="ui.selectNote(note.id)"
+          >
+            <span
+              class="h-4 w-1 rounded-full"
+              [style.background]="note.color || ui.accent(note.id)"
+            ></span>
+            <span class="min-w-0 flex-1 truncate">
+              <span
+                class="font-body-sm text-body-sm block truncate text-on-surface transition-colors group-hover:text-primary dark:text-inverse-on-surface dark:group-hover:text-inverse-primary"
+                >{{ note.title || 'Untitled' }}</span
+              >
+            </span>
+          </button>
+        </li>
+      } @empty {
+        @if (!ui.loading()) {
+          <li class="font-body-sm text-body-sm px-2 text-outline">No hay notas aun</li>
+        }
+      }
+    </ul>
+  </div>
+
+  <div class="mt-auto flex justify-center border-t border-surface-variant/50 pt-4 dark:border-white/5">
+    <button
+      type="button"
+      role="switch"
+      class="relative h-8 w-[72px] shrink-0 rounded-lg bg-surface-variant p-1 transition-colors dark:bg-primary/40"
+      [attr.aria-checked]="theme.theme() === 'dark'"
+      aria-label="Cambiar tema"
+      (click)="theme.toggle()"
+    >
+      <span
+        class="material-symbols-outlined pointer-events-none absolute top-1/2 left-1.5 -translate-y-1/2 text-[16px] text-outline"
+        >light_mode</span
+      >
+      <span
+        class="material-symbols-outlined pointer-events-none absolute top-1/2 right-1.5 -translate-y-1/2 text-[16px] text-outline"
+        >dark_mode</span
+      >
+      <span
+        class="relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow transition-transform duration-200"
+        [class.translate-x-10]="theme.theme() === 'dark'"
+      >
+        <span class="material-symbols-outlined text-[14px] text-primary">{{
+          theme.theme() === 'dark' ? 'dark_mode' : 'light_mode'
+        }}</span>
+      </span>
+    </button>
+  </div>
+</nav>

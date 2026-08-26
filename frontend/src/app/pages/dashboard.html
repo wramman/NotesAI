@@ -1,0 +1,98 @@
+<main class="relative flex min-h-0 flex-1 flex-col overflow-hidden p-6">
+  <div class="pointer-events-none absolute inset-0 overflow-hidden opacity-30 dark:opacity-10">
+    <div
+      class="absolute top-[-20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-primary/5 blur-[120px]"
+    ></div>
+    <div
+      class="absolute right-[-10%] bottom-[-20%] h-[400px] w-[400px] rounded-full bg-secondary-container/20 blur-[100px]"
+    ></div>
+  </div>
+
+  @if (ui.error()) {
+    <p class="z-10 mb-4 text-center font-body-sm text-body-sm text-error">{{ ui.error() }}</p>
+  }
+
+  @if (ui.selected(); as note) {
+    <div class="z-10 mx-auto flex h-full w-full max-w-[840px] flex-col gap-4">
+      <div class="flex items-center gap-2">
+        <input
+          class="font-headline-md text-headline-md min-w-0 flex-1 border-0 bg-transparent p-0 text-on-surface outline-none dark:text-inverse-on-surface"
+          [value]="note.title"
+          (input)="onTitle($any($event.target).value)"
+          (blur)="ui.saveSelected()"
+          placeholder="Untitled"
+        />
+        <button
+          type="button"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-variant/60 hover:text-primary dark:text-outline dark:hover:bg-white/10"
+          [title]="note.is_pinned ? 'Unpin' : 'Pin'"
+          (click)="ui.togglePin()"
+        >
+          <span class="material-symbols-outlined" [class.filled]="note.is_pinned">star</span>
+        </button>
+        <button
+          type="button"
+          class="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-variant/60 hover:text-error dark:text-outline dark:hover:bg-white/10"
+          title="Delete"
+          (click)="ui.deleteSelected()"
+        >
+          <span class="material-symbols-outlined">delete</span>
+        </button>
+      </div>
+
+      <textarea
+        class="font-body-md text-body-md min-h-0 flex-1 resize-none border-0 bg-transparent p-0 text-on-surface outline-none dark:text-inverse-on-surface"
+        [value]="note.content"
+        (input)="onContent($any($event.target).value)"
+        (blur)="ui.saveSelected()"
+        placeholder="Start writing…"
+      ></textarea>
+
+      <div
+        class="rounded-xl border border-surface-variant/50 bg-surface-container p-4 dark:border-white/5 dark:bg-white/5"
+      >
+        <div class="mb-2 flex items-center justify-between gap-2">
+          <p class="font-label-md text-label-md tracking-wider text-outline uppercase dark:text-inverse-on-surface">Resumen</p>
+          <button
+            type="button"
+            class="font-label-md text-label-md inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-on-primary disabled:opacity-50 dark:text-inverse-on-surface"
+            [disabled]="ui.summarizing()"
+            (click)="ui.summarizeSelected()"
+          >
+            <span class="material-symbols-outlined" style="font-size: 16px">heart_plus</span>
+            {{ ui.summarizing() ? 'Resumiendo…' : 'Resumir' }}
+          </button>
+        </div>
+        <p class="font-body-sm text-body-sm text-on-surface-variant dark:text-inverse-on-surface">
+          {{ note.summary || 'Aún no hay resumen. Escribe algo y pulsa Resumir.' }}
+        </p>
+      </div>
+    </div>
+  } @else {
+    <div class="z-10 m-auto max-w-sm text-center">
+      <div
+        class="mx-auto mb-6 flex h-24 w-24 rotate-3 transform items-center justify-center rounded-2xl border border-surface-variant/50 bg-surface-container shadow-sm dark:border-white/5 dark:bg-white/5"
+      >
+        <span class="material-symbols-outlined text-[48px] text-outline opacity-50 dark:text-inverse-on-surface"
+          >edit_document</span
+        >
+      </div>
+      <h2
+        class="font-headline-md text-headline-md mb-2 text-on-surface dark:text-inverse-on-surface"
+      >
+        Canvas Vacio
+      </h2>
+      <p class="font-body-md text-body-md mb-8 text-on-surface-variant dark:text-inverse-on-surface">
+        Selecciona una nota desde la Sidebar o crea una nueva nota capturando tus ideas
+      </p>
+      <button
+        type="button"
+        class="font-body-md text-body-md inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 font-medium text-on-primary transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary/90 dark:shadow-none"
+        (click)="ui.createNote()"
+      >
+        <span class="material-symbols-outlined">add</span>
+        Crear Nueva Nota
+      </button>
+    </div>
+  }
+</main>
