@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 
@@ -186,7 +187,7 @@ export class NotesUiService {
 
   async summarizeSelected(): Promise<void> {
     const selected = this.selected();
-    if (!selected || this.summarizing()) {
+    if (!selected || this.summarizing() || !selected.content.trim()) {
       return;
     }
     this.summarizing.set(true);
@@ -194,8 +195,14 @@ export class NotesUiService {
     try {
       const updated = await firstValueFrom(this.api.summarize(selected.id));
       this.replace(updated);
-    } catch {
-      this.error.set('No se pudo resumir. ¿Ollama está corriendo?');
+    } catch (err) {
+      if (err instanceof HttpErrorResponse && err.status === 400) {
+        this.error.set('Escribe contenido en la nota antes de resumir.');
+      } else if (err instanceof HttpErrorResponse && err.status === 503) {
+        this.error.set('No se pudo resumir. ¿Ollama está corriendo?');
+      } else {
+        this.error.set('No se pudo resumir la nota.');
+      }
     } finally {
       this.summarizing.set(false);
     }

@@ -45,7 +45,7 @@
         [value]="note.content"
         (input)="onContent($any($event.target).value)"
         (blur)="ui.saveSelected()"
-        placeholder="Start writing…"
+        placeholder="Empieza a escribir..."
       ></textarea>
 
       <div
@@ -56,7 +56,7 @@
           <button
             type="button"
             class="font-label-md text-label-md inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-1.5 text-on-primary disabled:opacity-50 dark:text-inverse-on-surface"
-            [disabled]="ui.summarizing()"
+            [disabled]="ui.summarizing() || !note.content.trim()"
             (click)="ui.summarizeSelected()"
           >
             <span class="material-symbols-outlined" style="font-size: 16px">heart_plus</span>
