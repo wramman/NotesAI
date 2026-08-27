@@ -47,7 +47,15 @@ def summarize(db: Session, note_id: int):
     if not note:
         return None
     summary = note.content
-    note.summary = resumir(summary)
+
+    if not note.content.strip():
+        return ValueError("The note content is empty. Cannot generate a summary.")
+    
+    try:
+        note.summary = resumir(summary)
+    except ConnectionError:
+        raise ConnectionError("Ollama service is down. Please try again later.")
+    
     db.commit()
     db.refresh(note)
     return note

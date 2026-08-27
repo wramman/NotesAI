@@ -47,7 +47,14 @@ def update_note(note_id: int, note: NoteUpdate, db: Session = Depends(get_db)):
 
 @router.get("/{note_id}/summarize", response_model=NoteOut)
 def summarize_note(note_id: int, db: Session = Depends(get_db)):
-    summarized_note = summarize(db, note_id)
+    try:
+        summarized_note = summarize(db, note_id)
+    except ConnectionError:
+        raise HTTPException(status_code=503, detail="Service unavailable. Please try again later.")
+
+    if isinstance(summarized_note, ValueError):
+        raise HTTPException(status_code=400, detail=str("No content to summarize. The note is empty."))
+    
     if not summarized_note:
         raise HTTPException(status_code=404, detail="Note not found")
     return summarized_note
