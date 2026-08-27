@@ -4,3 +4,6 @@ fastapi[standard]
 pydantic-settings
 python-dotenv
 ollama
+pytest 
+pytest-asyncio
+httpx 
