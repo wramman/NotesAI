@@ -13,7 +13,7 @@ export interface NavItem {
   icon: string;
 }
 
-const ACCENTS = ['#605b54', '#10b981', '#f59e0b', '#9a4121', '#825516'];
+const ACCENTS = ['#3d6d8f', '#7ba3bf', '#a8c5d8', '#5a7d96', '#b8d4e8'];
 
 @Injectable({ providedIn: 'root' })
 export class NotesUiService {
@@ -35,7 +35,7 @@ export class NotesUiService {
   readonly summarizing = signal(false);
   readonly error = signal<string | null>(null);
   readonly colorPickerOpen = signal(false);
-  readonly hexDraft = signal('#9a4121');
+  readonly hexDraft = signal('#3d6d8f');
 
   readonly visibleNotes = computed(() => {
     const notes = this.notes();
@@ -94,7 +94,7 @@ export class NotesUiService {
     const open = !this.colorPickerOpen();
     this.colorPickerOpen.set(open);
     if (open) {
-      this.hexDraft.set(this.normalizeHex(selected.color) ?? '#9a4121');
+      this.hexDraft.set(this.normalizeHex(selected.color) ?? '#3d6d8f');
     }
   }
 
@@ -141,7 +141,7 @@ export class NotesUiService {
     this.error.set(null);
     try {
       const note = await firstValueFrom(
-        this.api.create({ title: 'Untitled', content: '' }),
+        this.api.create({ title: 'Sin Titulo', content: '' }),
       );
       this.notes.update((notes) => [note, ...notes]);
       this.activeView.set('all');
