@@ -1,9 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from datetime import datetime
 
+
 class NoteBase(BaseModel):
-    title: str
-    content: str
+    title: str = Field(..., min_length=1, max_length=100)
+    content: str = ""
     color: str | None = None
 
 class NoteCreate(NoteBase):
